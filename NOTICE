@@ -1,0 +1,28 @@
+NOTICE  -  scope of the MIT licence in this repository
+
+The MIT licence in LICENSE covers the SOFTWARE: the Python source, the SQL, the
+React application, the Docker and build configuration, the documentation, and
+the public project documentation.
+
+It does NOT cover the data.
+
+`data/quarantine/loans.db` is a private build artifact derived from a third-party
+Kaggle vehicle-loan dataset whose published metadata records its licence as
+UNKNOWN. Neither the source CSV nor the database is tracked in this repository.
+An authorized local database enters the hosted demonstration image during its
+private build. No licence, sublicence, or redistribution right in that data is
+granted by LICENSE or by the repository owner, and none should be inferred from
+the MIT grant. If you intend to use the data rather than the code, establish
+your own rights with the dataset's publisher first.
+
+The dataset measures first-EMI loan default. It contains no fraud outcome and
+no declared origination channel, and nothing in this repository should be
+represented as fraud data or as a fraud-detection capability.
+
+Third-party marks
+-----------------
+
+Brand glyphs embedded in api/tech_stack.py are taken unmodified from the
+simple-icons project (https://simpleicons.org), which is released under
+CC0-1.0. Each mark remains the property of its respective project, and
+trademark rights in those marks are not affected by the MIT licence here.

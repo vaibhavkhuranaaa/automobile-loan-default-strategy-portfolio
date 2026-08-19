@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+
+# Node
+node_modules/
+web/dist/
+
+# Secrets and OS noise
+.env
+.DS_Store
+
+
+# Private source data. The raw Kaggle CSVs and the supplied data dictionary are
+# never published.
+data/raw/
+data/quarantine/
+*.db
+artifacts/kpi_pack/*.csv
+artifacts/kpi_pack/*.xlsx
+bi/exports/
+
+# Local tooling policy
+.gemini/
+**/.gemini/
+.windsurf/
+**/.windsurf/
+.roo/
+**/.roo/
+.continue/
+**/.continue/
+.windsurfrules
+**/.windsurfrules
+.aider*
+**/.aider*
+.github/prompts/
+.github/agents/
+.github/**/*.agent.md
+.project/
+docs/PROJECT_CONTEXT.md
+docs/takeover-prompt.md
+docs/continuation-guide.md
+docs/NEXT_CHAT_PROMPT.md
+docs/resume-instructions.md
+.vscode/tasks.json

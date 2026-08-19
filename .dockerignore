@@ -1,0 +1,21 @@
+# Keep the build context small and the image clean.
+.git
+.venv
+node_modules
+web/node_modules
+web/dist
+**/__pycache__
+*.pyc
+.project
+artifacts/design-review
+docs
+portfolio
+architecture
+.github
+
+# Raw source data is never shipped; only the built SQLite store is copied,
+# and that COPY is explicit in the Dockerfile.
+data/raw
+data/quarantine/*.csv
+data/quarantine/*.xlsx
+data/quarantine/*.json

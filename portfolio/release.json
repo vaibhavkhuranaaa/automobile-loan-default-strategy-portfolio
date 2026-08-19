@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "status": "enabled",
+  "provider": "Azure Container Apps",
+  "workflow": "az-acr-build-and-containerapp-update",
+  "deploymentTarget": "ca-automobile-loan-strategy (rg-automobile-loan-strategy, eastus)",
+  "publicProject": true,
+  "verification": {
+    "url": "https://ca-automobile-loan-strategy.mangosand-c2cfc0f3.eastus.azurecontainerapps.io/health",
+    "sourceShaField": "source_sha"
+  },
+  "paidResource": false,
+  "costApprovalRequired": false
+}

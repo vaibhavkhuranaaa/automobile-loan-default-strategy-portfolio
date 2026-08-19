@@ -1,0 +1,935 @@
+{
+  "scope": "retrospective first-EMI default strategy evidence; not underwriting, fraud, pricing, or automated decisions",
+  "data_period": "2018-08-01 through 2018-10-31",
+  "splits": {
+    "train": 68002,
+    "calibration": 66788,
+    "test": 98364
+  },
+  "feature_count": 34,
+  "prohibited_fields": [
+    "AADHAR_FLAG",
+    "CURRENT_PINCODE_ID",
+    "DATE_OF_BIRTH",
+    "DISBURSAL_DATE",
+    "DRIVING_FLAG",
+    "EMPLOYEE_CODE_ID",
+    "MOBILENO_AVL_FLAG",
+    "PAN_FLAG",
+    "PASSPORT_FLAG",
+    "UNIQUEID",
+    "VOTERID_FLAG"
+  ],
+  "models": {
+    "logistic_baseline": {
+      "auroc": 0.62286,
+      "pr_auc": 0.32073,
+      "brier_score": 0.23962,
+      "ece_decile": 0.25169
+    },
+    "calibrated_challenger": {
+      "auroc": 0.64363,
+      "pr_auc": 0.33927,
+      "brier_score": 0.17364,
+      "ece_decile": 0.04542
+    }
+  },
+  "selected_model": "calibrated_challenger",
+  "economic_assumptions": {
+    "contribution_rate": 0.12,
+    "loss_severity": 0.65,
+    "review_cost_inr": 1500.0,
+    "note": "Analyst inputs, not lender-sourced. The band ranking is sensitive to all three; see per-band break-even values and the sensitivity grid."
+  },
+  "policies": [
+    {
+      "name": "conservative",
+      "risk_threshold": 0.16,
+      "approved_count": 43961,
+      "review_count": 27585,
+      "approved_amount_inr": 2276270468.0,
+      "defaulted_amount_inr": 357726618.0,
+      "approval_rate": 0.44692,
+      "manual_review_rate": 0.28044,
+      "observed_default_rate": 0.15291,
+      "gross_contribution_inr": 273152456.16,
+      "credit_loss_inr": 232522301.7,
+      "review_cost_inr": 41377500.0,
+      "assumption_led_contribution": -747345.54,
+      "breakeven_loss_severity": 0.64791,
+      "breakeven_contribution_rate": 0.12033,
+      "breakeven_review_cost_inr": 1472.91,
+      "assumptions": "12% contribution rate; 65% loss severity; INR 1,500 per manual review; retrospective observed first-EMI default"
+    },
+    {
+      "name": "reference",
+      "risk_threshold": 0.22,
+      "approved_count": 65946,
+      "review_count": 15968,
+      "approved_amount_inr": 3565186186.0,
+      "defaulted_amount_inr": 675507370.0,
+      "approval_rate": 0.67043,
+      "manual_review_rate": 0.16234,
+      "observed_default_rate": 0.1837,
+      "gross_contribution_inr": 427822342.32,
+      "credit_loss_inr": 439079790.5,
+      "review_cost_inr": 23952000.0,
+      "assumption_led_contribution": -35209448.18,
+      "breakeven_loss_severity": 0.59788,
+      "breakeven_contribution_rate": 0.12988,
+      "breakeven_review_cost_inr": -705.0,
+      "assumptions": "12% contribution rate; 65% loss severity; INR 1,500 per manual review; retrospective observed first-EMI default"
+    },
+    {
+      "name": "expansion",
+      "risk_threshold": 0.28,
+      "approved_count": 84586,
+      "review_count": 19262,
+      "approved_amount_inr": 4688437408.0,
+      "defaulted_amount_inr": 1022267547.0,
+      "approval_rate": 0.85993,
+      "manual_review_rate": 0.19582,
+      "observed_default_rate": 0.21082,
+      "gross_contribution_inr": 562612488.96,
+      "credit_loss_inr": 664473905.55,
+      "review_cost_inr": 28893000.0,
+      "assumption_led_contribution": -130754416.59,
+      "breakeven_loss_severity": 0.52209,
+      "breakeven_contribution_rate": 0.14789,
+      "breakeven_review_cost_inr": -5288.21,
+      "assumptions": "12% contribution rate; 65% loss severity; INR 1,500 per manual review; retrospective observed first-EMI default"
+    }
+  ],
+  "sensitivity": [
+    {
+      "contribution_rate": 0.1,
+      "loss_severity": 0.55,
+      "review_cost_inr": 0.0,
+      "best_band": "conservative",
+      "best_contribution_inr": 30877406.9,
+      "any_band_positive": true
+    },
+    {
+      "contribution_rate": 0.1,
+      "loss_severity": 0.55,
+      "review_cost_inr": 1500.0,
+      "best_band": "conservative",
+      "best_contribution_inr": -10500093.1,
+      "any_band_positive": false
+    },
+    {
+      "contribution_rate": 0.1,
+      "loss_severity": 0.55,
+      "review_cost_inr": 3000.0,
+      "best_band": "conservative",
+      "best_contribution_inr": -51877593.1,
+      "any_band_positive": false
+    },
+    {
+      "contribution_rate": 0.1,
+      "loss_severity": 0.65,
+      "review_cost_inr": 0.0,
+      "best_band": "conservative",
+      "best_contribution_inr": -4895254.9,
+      "any_band_positive": false
+    },
+    {
+      "contribution_rate": 0.1,
+      "loss_severity": 0.65,
+      "review_cost_inr": 1500.0,
+      "best_band": "conservative",
+      "best_contribution_inr": -46272754.9,
+      "any_band_positive": false
+    },
+    {
+      "contribution_rate": 0.1,
+      "loss_severity": 0.65,
+      "review_cost_inr": 3000.0,
+      "best_band": "conservative",
+      "best_contribution_inr": -87650254.9,
+      "any_band_positive": false
+    },
+    {
+      "contribution_rate": 0.1,
+      "loss_severity": 0.75,
+      "review_cost_inr": 0.0,
+      "best_band": "conservative",
+      "best_contribution_inr": -40667916.7,
+      "any_band_positive": false
+    },
+    {
+      "contribution_rate": 0.1,
+      "loss_severity": 0.75,
+      "review_cost_inr": 1500.0,
+      "best_band": "conservative",
+      "best_contribution_inr": -82045416.7,
+      "any_band_positive": false
+    },
+    {
+      "contribution_rate": 0.1,
+      "loss_severity": 0.75,
+      "review_cost_inr": 3000.0,
+      "best_band": "conservative",
+      "best_contribution_inr": -123422916.7,
+      "any_band_positive": false
+    },
+    {
+      "contribution_rate": 0.12,
+      "loss_severity": 0.55,
+      "review_cost_inr": 0.0,
+      "best_band": "conservative",
+      "best_contribution_inr": 76402816.26,
+      "any_band_positive": true
+    },
+    {
+      "contribution_rate": 0.12,
+      "loss_severity": 0.55,
+      "review_cost_inr": 1500.0,
+      "best_band": "conservative",
+      "best_contribution_inr": 35025316.26,
+      "any_band_positive": true
+    },
+    {
+      "contribution_rate": 0.12,
+      "loss_severity": 0.55,
+      "review_cost_inr": 3000.0,
+      "best_band": "reference",
+      "best_contribution_inr": 8389288.82,
+      "any_band_positive": true
+    },
+    {
+      "contribution_rate": 0.12,
+      "loss_severity": 0.65,
+      "review_cost_inr": 0.0,
+      "best_band": "conservative",
+      "best_contribution_inr": 40630154.46,
+      "any_band_positive": true
+    },
+    {
+      "contribution_rate": 0.12,
+      "loss_severity": 0.65,
+      "review_cost_inr": 1500.0,
+      "best_band": "conservative",
+      "best_contribution_inr": -747345.54,
+      "any_band_positive": false
+    },
+    {
+      "contribution_rate": 0.12,
+      "loss_severity": 0.65,
+      "review_cost_inr": 3000.0,
+      "best_band": "conservative",
+      "best_contribution_inr": -42124845.54,
+      "any_band_positive": false
+    },
+    {
+      "contribution_rate": 0.12,
+      "loss_severity": 0.75,
+      "review_cost_inr": 0.0,
+      "best_band": "conservative",
+      "best_contribution_inr": 4857492.66,
+      "any_band_positive": true
+    },
+    {
+      "contribution_rate": 0.12,
+      "loss_severity": 0.75,
+      "review_cost_inr": 1500.0,
+      "best_band": "conservative",
+      "best_contribution_inr": -36520007.34,
+      "any_band_positive": false
+    },
+    {
+      "contribution_rate": 0.12,
+      "loss_severity": 0.75,
+      "review_cost_inr": 3000.0,
+      "best_band": "conservative",
+      "best_contribution_inr": -77897507.34,
+      "any_band_positive": false
+    },
+    {
+      "contribution_rate": 0.14,
+      "loss_severity": 0.55,
+      "review_cost_inr": 0.0,
+      "best_band": "reference",
+      "best_contribution_inr": 127597012.54,
+      "any_band_positive": true
+    },
+    {
+      "contribution_rate": 0.14,
+      "loss_severity": 0.55,
+      "review_cost_inr": 1500.0,
+      "best_band": "reference",
+      "best_contribution_inr": 103645012.54,
+      "any_band_positive": true
+    },
+    {
+      "contribution_rate": 0.14,
+      "loss_severity": 0.55,
+      "review_cost_inr": 3000.0,
+      "best_band": "reference",
+      "best_contribution_inr": 79693012.54,
+      "any_band_positive": true
+    },
+    {
+      "contribution_rate": 0.14,
+      "loss_severity": 0.65,
+      "review_cost_inr": 0.0,
+      "best_band": "conservative",
+      "best_contribution_inr": 86155563.82,
+      "any_band_positive": true
+    },
+    {
+      "contribution_rate": 0.14,
+      "loss_severity": 0.65,
+      "review_cost_inr": 1500.0,
+      "best_band": "conservative",
+      "best_contribution_inr": 44778063.82,
+      "any_band_positive": true
+    },
+    {
+      "contribution_rate": 0.14,
+      "loss_severity": 0.65,
+      "review_cost_inr": 3000.0,
+      "best_band": "reference",
+      "best_contribution_inr": 12142275.54,
+      "any_band_positive": true
+    },
+    {
+      "contribution_rate": 0.14,
+      "loss_severity": 0.75,
+      "review_cost_inr": 0.0,
+      "best_band": "conservative",
+      "best_contribution_inr": 50382902.02,
+      "any_band_positive": true
+    },
+    {
+      "contribution_rate": 0.14,
+      "loss_severity": 0.75,
+      "review_cost_inr": 1500.0,
+      "best_band": "conservative",
+      "best_contribution_inr": 9005402.02,
+      "any_band_positive": true
+    },
+    {
+      "contribution_rate": 0.14,
+      "loss_severity": 0.75,
+      "review_cost_inr": 3000.0,
+      "best_band": "conservative",
+      "best_contribution_inr": -32372097.98,
+      "any_band_positive": false
+    }
+  ],
+  "bootstrap": {
+    "conservative": {
+      "approval_rate": [
+        0.44381,
+        0.45021
+      ],
+      "observed_default_rate": [
+        0.14899,
+        0.15657
+      ],
+      "contribution_inr": [
+        -6498712.74,
+        4942467.91
+      ],
+      "contribution_positive_share": 0.3875
+    },
+    "reference": {
+      "approval_rate": [
+        0.66736,
+        0.6731
+      ],
+      "observed_default_rate": [
+        0.18033,
+        0.1866
+      ],
+      "contribution_inr": [
+        -42450980.0,
+        -27373457.09
+      ],
+      "contribution_positive_share": 0.0
+    },
+    "expansion": {
+      "approval_rate": [
+        0.85777,
+        0.86219
+      ],
+      "observed_default_rate": [
+        0.20784,
+        0.21374
+      ],
+      "contribution_inr": [
+        -140958720.31,
+        -121249960.04
+      ],
+      "contribution_positive_share": 0.0
+    }
+  },
+  "calibration_drift": {
+    "calibration_month_default_rate": 0.19188,
+    "test_month_default_rate": 0.23515,
+    "base_rate_shift": 0.04327,
+    "mean_predicted": 0.19004,
+    "mean_gap": 0.04511,
+    "ece_published": 0.04542,
+    "ece_after_prior_shift": 0.00926,
+    "share_of_error_from_base_rate": 0.7961,
+    "odds_factor": 1.3304,
+    "note": "The correction uses the test month's own base rate, which is not knowable in advance, so this is a diagnostic and not a deployable adjustment. It bounds what a correctly-timed recalibration could recover. Refitting the calibrator on the month being scored would not be time-safe and is not done here."
+  },
+  "band_separation": {
+    "best_band": "conservative",
+    "runner_up": "reference",
+    "intervals_overlap": false,
+    "note": "95% intervals from resampling the October holdout with the cut-offs held fixed. They cover sampling variation only, not the economic assumptions."
+  },
+  "impact_by_group": [
+    {
+      "attribute": "State",
+      "band": "conservative",
+      "group": "1",
+      "loans": 3423,
+      "approval_rate": 0.6021,
+      "observed_default_rate": 0.20158,
+      "approval_ratio_to_best": 0.9987
+    },
+    {
+      "attribute": "State",
+      "band": "conservative",
+      "group": "2",
+      "loans": 1760,
+      "approval_rate": 0.24659,
+      "observed_default_rate": 0.31761,
+      "approval_ratio_to_best": 0.409
+    },
+    {
+      "attribute": "State",
+      "band": "conservative",
+      "group": "3",
+      "loans": 17757,
+      "approval_rate": 0.60286,
+      "observed_default_rate": 0.19716,
+      "approval_ratio_to_best": 1.0
+    },
+    {
+      "attribute": "State",
+      "band": "conservative",
+      "group": "4",
+      "loans": 18996,
+      "approval_rate": 0.42983,
+      "observed_default_rate": 0.228,
+      "approval_ratio_to_best": 0.713
+    },
+    {
+      "attribute": "State",
+      "band": "conservative",
+      "group": "5",
+      "loans": 4599,
+      "approval_rate": 0.5212,
+      "observed_default_rate": 0.21657,
+      "approval_ratio_to_best": 0.8645
+    },
+    {
+      "attribute": "State",
+      "band": "conservative",
+      "group": "6",
+      "loans": 14383,
+      "approval_rate": 0.45484,
+      "observed_default_rate": 0.22096,
+      "approval_ratio_to_best": 0.7545
+    },
+    {
+      "attribute": "State",
+      "band": "conservative",
+      "group": "7",
+      "loans": 2436,
+      "approval_rate": 0.4335,
+      "observed_default_rate": 0.23317,
+      "approval_ratio_to_best": 0.7191
+    },
+    {
+      "attribute": "State",
+      "band": "conservative",
+      "group": "8",
+      "loans": 5382,
+      "approval_rate": 0.40412,
+      "observed_default_rate": 0.26644,
+      "approval_ratio_to_best": 0.6703
+    },
+    {
+      "attribute": "State",
+      "band": "conservative",
+      "group": "9",
+      "loans": 5930,
+      "approval_rate": 0.41737,
+      "observed_default_rate": 0.24772,
+      "approval_ratio_to_best": 0.6923
+    },
+    {
+      "attribute": "State",
+      "band": "conservative",
+      "group": "10",
+      "loans": 1315,
+      "approval_rate": 0.58099,
+      "observed_default_rate": 0.19163,
+      "approval_ratio_to_best": 0.9637
+    },
+    {
+      "attribute": "State",
+      "band": "conservative",
+      "group": "11",
+      "loans": 2590,
+      "approval_rate": 0.40309,
+      "observed_default_rate": 0.20425,
+      "approval_ratio_to_best": 0.6686
+    },
+    {
+      "attribute": "State",
+      "band": "conservative",
+      "group": "12",
+      "loans": 1625,
+      "approval_rate": 0.56123,
+      "observed_default_rate": 0.35077,
+      "approval_ratio_to_best": 0.9309
+    },
+    {
+      "attribute": "State",
+      "band": "conservative",
+      "group": "13",
+      "loans": 6836,
+      "approval_rate": 0.10123,
+      "observed_default_rate": 0.31978,
+      "approval_ratio_to_best": 0.1679
+    },
+    {
+      "attribute": "State",
+      "band": "conservative",
+      "group": "14",
+      "loans": 3440,
+      "approval_rate": 0.18895,
+      "observed_default_rate": 0.29041,
+      "approval_ratio_to_best": 0.3134
+    },
+    {
+      "attribute": "State",
+      "band": "conservative",
+      "group": "15",
+      "loans": 2379,
+      "approval_rate": 0.52333,
+      "observed_default_rate": 0.24128,
+      "approval_ratio_to_best": 0.8681
+    },
+    {
+      "attribute": "State",
+      "band": "conservative",
+      "group": "16",
+      "loans": 1150,
+      "approval_rate": 0.55391,
+      "observed_default_rate": 0.21043,
+      "approval_ratio_to_best": 0.9188
+    },
+    {
+      "attribute": "State",
+      "band": "conservative",
+      "group": "17",
+      "loans": 1843,
+      "approval_rate": 0.46555,
+      "observed_default_rate": 0.24797,
+      "approval_ratio_to_best": 0.7722
+    },
+    {
+      "attribute": "State",
+      "band": "conservative",
+      "group": "18",
+      "loans": 1936,
+      "approval_rate": 0.45919,
+      "observed_default_rate": 0.23967,
+      "approval_ratio_to_best": 0.7617
+    },
+    {
+      "attribute": "State",
+      "band": "reference",
+      "group": "1",
+      "loans": 3423,
+      "approval_rate": 0.8364,
+      "observed_default_rate": 0.20158,
+      "approval_ratio_to_best": 0.9771
+    },
+    {
+      "attribute": "State",
+      "band": "reference",
+      "group": "2",
+      "loans": 1760,
+      "approval_rate": 0.45341,
+      "observed_default_rate": 0.31761,
+      "approval_ratio_to_best": 0.5297
+    },
+    {
+      "attribute": "State",
+      "band": "reference",
+      "group": "3",
+      "loans": 17757,
+      "approval_rate": 0.8199,
+      "observed_default_rate": 0.19716,
+      "approval_ratio_to_best": 0.9578
+    },
+    {
+      "attribute": "State",
+      "band": "reference",
+      "group": "4",
+      "loans": 18996,
+      "approval_rate": 0.66761,
+      "observed_default_rate": 0.228,
+      "approval_ratio_to_best": 0.7799
+    },
+    {
+      "attribute": "State",
+      "band": "reference",
+      "group": "5",
+      "loans": 4599,
+      "approval_rate": 0.75951,
+      "observed_default_rate": 0.21657,
+      "approval_ratio_to_best": 0.8873
+    },
+    {
+      "attribute": "State",
+      "band": "reference",
+      "group": "6",
+      "loans": 14383,
+      "approval_rate": 0.67142,
+      "observed_default_rate": 0.22096,
+      "approval_ratio_to_best": 0.7844
+    },
+    {
+      "attribute": "State",
+      "band": "reference",
+      "group": "7",
+      "loans": 2436,
+      "approval_rate": 0.70361,
+      "observed_default_rate": 0.23317,
+      "approval_ratio_to_best": 0.822
+    },
+    {
+      "attribute": "State",
+      "band": "reference",
+      "group": "8",
+      "loans": 5382,
+      "approval_rate": 0.6388,
+      "observed_default_rate": 0.26644,
+      "approval_ratio_to_best": 0.7463
+    },
+    {
+      "attribute": "State",
+      "band": "reference",
+      "group": "9",
+      "loans": 5930,
+      "approval_rate": 0.64503,
+      "observed_default_rate": 0.24772,
+      "approval_ratio_to_best": 0.7535
+    },
+    {
+      "attribute": "State",
+      "band": "reference",
+      "group": "10",
+      "loans": 1315,
+      "approval_rate": 0.78707,
+      "observed_default_rate": 0.19163,
+      "approval_ratio_to_best": 0.9195
+    },
+    {
+      "attribute": "State",
+      "band": "reference",
+      "group": "11",
+      "loans": 2590,
+      "approval_rate": 0.60463,
+      "observed_default_rate": 0.20425,
+      "approval_ratio_to_best": 0.7063
+    },
+    {
+      "attribute": "State",
+      "band": "reference",
+      "group": "12",
+      "loans": 1625,
+      "approval_rate": 0.856,
+      "observed_default_rate": 0.35077,
+      "approval_ratio_to_best": 1.0
+    },
+    {
+      "attribute": "State",
+      "band": "reference",
+      "group": "13",
+      "loans": 6836,
+      "approval_rate": 0.32563,
+      "observed_default_rate": 0.31978,
+      "approval_ratio_to_best": 0.3804
+    },
+    {
+      "attribute": "State",
+      "band": "reference",
+      "group": "14",
+      "loans": 3440,
+      "approval_rate": 0.34273,
+      "observed_default_rate": 0.29041,
+      "approval_ratio_to_best": 0.4004
+    },
+    {
+      "attribute": "State",
+      "band": "reference",
+      "group": "15",
+      "loans": 2379,
+      "approval_rate": 0.75032,
+      "observed_default_rate": 0.24128,
+      "approval_ratio_to_best": 0.8765
+    },
+    {
+      "attribute": "State",
+      "band": "reference",
+      "group": "16",
+      "loans": 1150,
+      "approval_rate": 0.76522,
+      "observed_default_rate": 0.21043,
+      "approval_ratio_to_best": 0.8939
+    },
+    {
+      "attribute": "State",
+      "band": "reference",
+      "group": "17",
+      "loans": 1843,
+      "approval_rate": 0.61096,
+      "observed_default_rate": 0.24797,
+      "approval_ratio_to_best": 0.7137
+    },
+    {
+      "attribute": "State",
+      "band": "reference",
+      "group": "18",
+      "loans": 1936,
+      "approval_rate": 0.70093,
+      "observed_default_rate": 0.23967,
+      "approval_ratio_to_best": 0.8188
+    },
+    {
+      "attribute": "State",
+      "band": "expansion",
+      "group": "1",
+      "loans": 3423,
+      "approval_rate": 0.9407,
+      "observed_default_rate": 0.20158,
+      "approval_ratio_to_best": 0.959
+    },
+    {
+      "attribute": "State",
+      "band": "expansion",
+      "group": "2",
+      "loans": 1760,
+      "approval_rate": 0.72216,
+      "observed_default_rate": 0.31761,
+      "approval_ratio_to_best": 0.7362
+    },
+    {
+      "attribute": "State",
+      "band": "expansion",
+      "group": "3",
+      "loans": 17757,
+      "approval_rate": 0.94453,
+      "observed_default_rate": 0.19716,
+      "approval_ratio_to_best": 0.9629
+    },
+    {
+      "attribute": "State",
+      "band": "expansion",
+      "group": "4",
+      "loans": 18996,
+      "approval_rate": 0.86439,
+      "observed_default_rate": 0.228,
+      "approval_ratio_to_best": 0.8812
+    },
+    {
+      "attribute": "State",
+      "band": "expansion",
+      "group": "5",
+      "loans": 4599,
+      "approval_rate": 0.9065,
+      "observed_default_rate": 0.21657,
+      "approval_ratio_to_best": 0.9241
+    },
+    {
+      "attribute": "State",
+      "band": "expansion",
+      "group": "6",
+      "loans": 14383,
+      "approval_rate": 0.85448,
+      "observed_default_rate": 0.22096,
+      "approval_ratio_to_best": 0.8711
+    },
+    {
+      "attribute": "State",
+      "band": "expansion",
+      "group": "7",
+      "loans": 2436,
+      "approval_rate": 0.90066,
+      "observed_default_rate": 0.23317,
+      "approval_ratio_to_best": 0.9182
+    },
+    {
+      "attribute": "State",
+      "band": "expansion",
+      "group": "8",
+      "loans": 5382,
+      "approval_rate": 0.84857,
+      "observed_default_rate": 0.26644,
+      "approval_ratio_to_best": 0.8651
+    },
+    {
+      "attribute": "State",
+      "band": "expansion",
+      "group": "9",
+      "loans": 5930,
+      "approval_rate": 0.86678,
+      "observed_default_rate": 0.24772,
+      "approval_ratio_to_best": 0.8836
+    },
+    {
+      "attribute": "State",
+      "band": "expansion",
+      "group": "10",
+      "loans": 1315,
+      "approval_rate": 0.9346,
+      "observed_default_rate": 0.19163,
+      "approval_ratio_to_best": 0.9528
+    },
+    {
+      "attribute": "State",
+      "band": "expansion",
+      "group": "11",
+      "loans": 2590,
+      "approval_rate": 0.83668,
+      "observed_default_rate": 0.20425,
+      "approval_ratio_to_best": 0.853
+    },
+    {
+      "attribute": "State",
+      "band": "expansion",
+      "group": "12",
+      "loans": 1625,
+      "approval_rate": 0.98092,
+      "observed_default_rate": 0.35077,
+      "approval_ratio_to_best": 1.0
+    },
+    {
+      "attribute": "State",
+      "band": "expansion",
+      "group": "13",
+      "loans": 6836,
+      "approval_rate": 0.66545,
+      "observed_default_rate": 0.31978,
+      "approval_ratio_to_best": 0.6784
+    },
+    {
+      "attribute": "State",
+      "band": "expansion",
+      "group": "14",
+      "loans": 3440,
+      "approval_rate": 0.62791,
+      "observed_default_rate": 0.29041,
+      "approval_ratio_to_best": 0.6401
+    },
+    {
+      "attribute": "State",
+      "band": "expansion",
+      "group": "15",
+      "loans": 2379,
+      "approval_rate": 0.90458,
+      "observed_default_rate": 0.24128,
+      "approval_ratio_to_best": 0.9222
+    },
+    {
+      "attribute": "State",
+      "band": "expansion",
+      "group": "16",
+      "loans": 1150,
+      "approval_rate": 0.92348,
+      "observed_default_rate": 0.21043,
+      "approval_ratio_to_best": 0.9414
+    },
+    {
+      "attribute": "State",
+      "band": "expansion",
+      "group": "17",
+      "loans": 1843,
+      "approval_rate": 0.78025,
+      "observed_default_rate": 0.24797,
+      "approval_ratio_to_best": 0.7954
+    },
+    {
+      "attribute": "State",
+      "band": "expansion",
+      "group": "18",
+      "loans": 1936,
+      "approval_rate": 0.89153,
+      "observed_default_rate": 0.23967,
+      "approval_ratio_to_best": 0.9089
+    },
+    {
+      "attribute": "Employment",
+      "band": "conservative",
+      "group": "Salaried",
+      "loans": 40420,
+      "approval_rate": 0.4808,
+      "observed_default_rate": 0.22138,
+      "approval_ratio_to_best": 1.0
+    },
+    {
+      "attribute": "Employment",
+      "band": "conservative",
+      "group": "Self employed",
+      "loans": 54373,
+      "approval_rate": 0.42409,
+      "observed_default_rate": 0.2456,
+      "approval_ratio_to_best": 0.882
+    },
+    {
+      "attribute": "Employment",
+      "band": "reference",
+      "group": "Salaried",
+      "loans": 40420,
+      "approval_rate": 0.6877,
+      "observed_default_rate": 0.22138,
+      "approval_ratio_to_best": 1.0
+    },
+    {
+      "attribute": "Employment",
+      "band": "reference",
+      "group": "Self employed",
+      "loans": 54373,
+      "approval_rate": 0.6588,
+      "observed_default_rate": 0.2456,
+      "approval_ratio_to_best": 0.958
+    },
+    {
+      "attribute": "Employment",
+      "band": "expansion",
+      "group": "Salaried",
+      "loans": 40420,
+      "approval_rate": 0.86477,
+      "observed_default_rate": 0.22138,
+      "approval_ratio_to_best": 1.0
+    },
+    {
+      "attribute": "Employment",
+      "band": "expansion",
+      "group": "Self employed",
+      "loans": 54373,
+      "approval_rate": 0.85577,
+      "observed_default_rate": 0.2456,
+      "approval_ratio_to_best": 0.9896
+    }
+  ],
+  "label_caveats": {
+    "outcome": "Verified default on the first EMI on its due date.",
+    "operational_contamination": "The book runs at a 21.7% first-EMI default rate, but the source cannot separate credit events from mandate or payment-plumbing failures and does not observe later cure or realized loss. Operational contamination is plausible, not measured. Any onboarding response requires lender evidence on first-presentation failure, cure, and loss.",
+    "loss_severity_mismatch": "Loss severity is applied to disbursal on loans that missed the first EMI. A first-EMI miss is a delinquency flag, not a loss event, and a large share of first-payment defaulters cure. The 65% figure is an ultimate-loss assumption charged against an early-delinquency population, which overstates credit loss by an amount this dataset cannot quantify: it carries no recovery, roll-rate, or ultimate-default data.",
+    "seasonality": "August trains, September calibrates, October tests: three consecutive months of one quarter, with no out-of-time validation beyond a single month and no economic cycle. October 2018 also falls in the Indian festival period, the peak of the vehicle-sales year, which draws a different applicant mix. Some of the October deterioration may be seasonal rather than a model or population problem, and nothing here separates the two.",
+    "calibration_currency": "The isotonic calibrator was fitted on September and applied to October, and the months ran at different default rates, so predicted probabilities sit below observed across every decile. The scores rank; they do not price. Fit any replacement calibrator on the most recent closed month, then apply it to the next scoring period."
+  }
+}

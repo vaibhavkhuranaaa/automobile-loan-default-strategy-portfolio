@@ -1,0 +1,26 @@
+flowchart LR
+  subgraph Build["Private evaluation build"]
+    A["Authorized source CSV"] --> B["Validation and time split"]
+    B --> C["Model evaluation"]
+    C --> D["Aggregate strategy evidence"]
+    C --> E["Private SQLite star schema"]
+  end
+
+  subgraph Product["Decision workbench"]
+    E --> F["Parameterized SQL"]
+    F --> G["FastAPI JSON API"]
+    D --> H["React application"]
+    G --> H
+    D --> I["Monthly KPI pack"]
+  end
+
+  subgraph Release["Release integrity"]
+    J["GitHub default branch"] --> K["Container build with SOURCE_SHA"]
+    K --> L["Azure Container Apps"]
+    L --> M["Anonymous /health source_sha"]
+    J --> N["Portfolio registry verification"]
+    M --> N
+  end
+
+  H --> K
+  I --> K

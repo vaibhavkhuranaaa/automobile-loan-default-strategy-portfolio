@@ -1,0 +1,41 @@
+[project]
+name = "automobile-loan-first-emi-strategy"
+version = "0.1.0"
+description = "Retrospective first-EMI default strategy evaluation"
+requires-python = ">=3.11"
+# Runtime dependencies: exactly what the served application imports. app.py pulls
+# in api.main (FastAPI/uvicorn), which reads SQLite through the standard library
+# and returns JSON. Nothing here is optional at request time.
+#
+# Dash, Plotly and a2wsgi were removed when the reporting dashboard stopped being
+# a second WSGI application mounted inside this process and became views in the
+# React client. The charts are inline SVG, so no charting library ships at all.
+# pandas and NumPy stay because the offline pipeline imports them; they are not
+# reached on a request path.
+dependencies = [
+  "fastapi>=0.115",
+  "uvicorn>=0.30",
+]
+
+# The offline regeneration pipeline  -  scripts/run_evaluation.py, scripts/build_db.py,
+# scripts/build_kpi_pack.py, bi/build_exports.py. These run on a developer machine
+# to produce artifacts/ and the SQLite store; the container only ever serves what
+# they already wrote, and importing them at request time would be a bug. Keeping
+# them out of the runtime image removes scikit-learn, matplotlib, openpyxl and
+# their transitive weight (scipy, pillow, fontTools, joblib)  -  measured at 182 MB
+# of site-packages, which is image the container has to pull before it can answer
+# its first request after scaling to zero.
+[dependency-groups]
+pipeline = [
+  "matplotlib>=3.9",
+  "numpy>=1.26",
+  "openpyxl>=3.1",
+  "pandas>=2.2",
+  "scikit-learn>=1.5",
+]
+
+[tool.uv]
+package = false
+# Installed by default for local work, so `uv run python scripts/...` is unchanged.
+# The image build passes --no-default-groups to leave them out.
+default-groups = ["pipeline"]

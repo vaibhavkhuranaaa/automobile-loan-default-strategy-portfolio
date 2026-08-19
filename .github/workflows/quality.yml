@@ -1,0 +1,23 @@
+name: quality
+on: [push, pull_request]
+jobs:
+  release-integrity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: '3.12'
+          enable-cache: true
+      - run: uv sync --frozen --no-default-groups
+      - run: uv run --no-sync --no-default-groups python -m unittest discover -s tests
+      - run: npm ci --prefix web
+      - run: npm run build --prefix web
+      - run: npm audit --omit=dev --prefix web

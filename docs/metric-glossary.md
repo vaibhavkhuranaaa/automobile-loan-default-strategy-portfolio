@@ -1,0 +1,18 @@
+# Metric glossary
+
+Results below are from the October 2018 retrospective test set (98,364 loans). August is training and September is calibration. They do not describe live performance or fraud detection.
+
+| Metric | Method | Business meaning | Desired direction | Verified result | Limitation |
+| --- | --- | --- | --- | --- | --- |
+| AUROC | Area under ROC curve | Ability to rank first-EMI-default risk | Higher | Logistic 0.62286; calibrated challenger 0.64363 (KS 0.209) | Does not set a policy threshold |
+| PR-AUC | Area under precision-recall curve | Ranking quality for the 21.7% default outcome | Higher | Logistic 0.32073; calibrated challenger 0.33927 | Depends on prevalence |
+| Brier score | Mean squared probability error | Probability accuracy | Lower | Logistic 0.23962; calibrated challenger 0.17364 | Retrospective only |
+| Decile ECE | Mean absolute gap between decile predicted and observed rate | Calibration reliability | Lower | Logistic 0.25169; calibrated challenger 0.04542 | Decile approximation, not a causal guarantee |
+| Approval rate | Share with predicted risk below scenario threshold | Volume available to a bounded policy scenario | Neither alone | Conservative 44.69%; reference 67.04%; expansion 85.99% | Not a live approval recommendation |
+| Manual-review rate | Share within ±2.5 percentage points of threshold | Review-capacity demand | Lower subject to control need | Conservative 28.04%; reference 16.23%; expansion 19.58% | The source has no actual review outcome |
+| Observed default rate | First-EMI defaults among scenario-approved October loans | Retrospective risk trade-off | Lower subject to volume | Conservative 15.29%; reference 18.37%; expansion 21.08% | Selection is simulated from model scores |
+| Estimated net contribution | Approved ₹ × contribution rate, less defaulted ₹ × loss severity, less referrals × review cost | Sensitivity of economic trade-offs in Indian rupees | Higher, subject to review capacity | At 12% contribution rate, 65% loss severity and ₹1,500 per manual review: conservative −₹0.07 cr (95% interval −₹0.65 to +₹0.49 cr, above zero in 39% of resamples); reference −₹3.52 cr; expansion −₹13.08 cr. No band clears zero | Not observed P&L. All three assumptions are analyst inputs, not lender-sourced; the review cost has no source and is a placeholder. Superseded twice: a version that omitted review cost entirely and reported ₹4.17 cr, then a version carrying a bureau-score defect that reported ₹1.52 cr |
+| Break-even assumption value | The value of one assumption at which a band's net contribution is exactly zero, holding the other two fixed | How much an assumption can move before the recommendation changes | Further from the assumed value is safer | Conservative breaks even at 0.64791 loss severity against 0.65 assumed and ₹1,472.91 review cost against ₹1,500 assumed | Univariate: moves one assumption at a time, so it understates risk when several move together |
+| Sensitivity grid | Winning band across 27 combinations of contribution rate, loss severity and review cost | Whether the recommendation survives assumption error, rather than resting on one point estimate | More combinations won is more robust | Conservative wins 22 of 27; no band clears zero in 13 of 27 | A coarse grid over plausible ranges, not a probability distribution over outcomes |
+
+The calibrated challenger is selected because it improves both AUROC and Brier score. Its results support comparing bounded aggregate scenarios only; they do not support pricing, adverse action, fraud decisions, or automatic approvals/declines.

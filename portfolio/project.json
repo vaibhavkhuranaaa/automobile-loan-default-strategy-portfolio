@@ -1,0 +1,408 @@
+{
+  "version": 2,
+  "slug": "automobile-loan-default-strategy-portfolio",
+  "title": "Automobile-Loan First-EMI Default Strategy Portfolio",
+  "summary": "A retrospective credit-policy platform over 233,154 Indian vehicle loans: portfolio and vintage reporting, score-decile and segment risk analytics, a policy workbench with editable economics, a per-loan inspector, and post-deployment monitoring.",
+  "outcome": "A credit-policy analyst can test where to draw a first-EMI risk line, see the confidence interval around the answer and who it declines, and take a recommendation or a refusal to governance. On the published assumptions the honest output is a refusal: no evaluated band clears zero.",
+  "industries": [
+    "Financial services",
+    "Consumer lending"
+  ],
+  "categories": [
+    "Analytics",
+    "Data Engineering"
+  ],
+  "stack": [
+    "Python",
+    "JavaScript",
+    "scikit-learn",
+    "SQLite",
+    "FastAPI",
+    "React",
+    "Docker",
+    "Azure Container Apps"
+  ],
+  "githubUrl": "https://github.com/vaibhavkhuranaaa/automobile-loan-default-strategy-portfolio",
+  "liveUrl": "https://ca-automobile-loan-strategy.mangosand-c2cfc0f3.eastus.azurecontainerapps.io",
+  "deployment": {
+    "provider": "Azure Container Apps",
+    "status": "live",
+    "runtime": "Single Docker container on the Consumption plan, 1.0 vCPU / 2.0 GiB, scale-to-zero: FastAPI serves the built React application, the JSON API and the report artifacts from one process, reading a SQLite star schema",
+    "exposure": "anonymous",
+    "productionClaim": false,
+    "verifiedAt": "2026-08-10T15:19:17Z",
+    "expiresAt": null,
+    "evidenceRefs": [
+      "deployment.live",
+      "delivery.performance"
+    ]
+  },
+  "metrics": [
+    "No evaluated band clears zero at the published assumptions: the best lands at −₹0.07 cr, above zero in 39% of 400 holdout resamples",
+    "Under an explicit zero-loss cure scenario, conservative clears zero if 0.32% of its first-EMI misses are operational rather than credit events, against 8.02% for reference and 19.68% for expansion; the source cannot measure that share",
+    "Conservative band admits 44.69% of applications at a 15.29% observed first-EMI default rate, referring 27,585 for manual review",
+    "Calibrated challenger AUROC 0.64363 and KS 0.209 on a 98,364-loan October holdout, against a 0.62286 logistic baseline",
+    "Decile calibration error 0.04542 against 0.25169 at baseline, but observed default exceeds predicted in all ten deciles by 3.0 to 5.5 points",
+    "Conservative ranks first in 22 of 27 published assumption combinations, and in 13 of those 27 no band clears zero at all",
+    "Under the conservative band 11 of 18 readable state codes fall below the four-fifths approval screen, the widest ratio being 0.17"
+  ],
+  "stages": [
+    "Ingest and validate the licensed Kaggle vehicle-loan archive",
+    "Build a SQLite star schema and score every vintage",
+    "Train a logistic baseline and a calibrated challenger",
+    "Evaluate policy bands on a retrospective October holdout, with bootstrap intervals",
+    "Cost the manual reviews each band generates, and stress-test across a 27-cell assumption grid",
+    "Report who each band declines, and monitor population stability against predicted-versus-observed default"
+  ],
+  "architecture": [
+    "SQLite star schema built by scripts/build_db.py from the quarantined source archive, with all three vintages scored",
+    "Parameterized SQL layer (cohort, policy_bands, score_deciles, segment_risk, kpi_monthly) shared by every surface",
+    "FastAPI JSON API serving cohort aggregates, risk analytics and per-loan detail on a single port",
+    "React application served from the same process at the root: portfolio, risk analytics, policy workbench, loan inspector, monitoring",
+    "Charts are hand-authored inline SVG, so no charting library ships to the browser",
+    "Monthly KPI report pack as a public PNG, with private CSV and XLSX generation"
+  ],
+  "evaluation": [
+    "Time-ordered split: 68,002 train, 66,788 calibration, 98,364 test across August–October 2018, over 34 features",
+    "A calibrated challenger is compared against a logistic baseline on AUROC, PR-AUC, Brier score and decile ECE, and is selected on calibration rather than ranking alone",
+    "Business thresholds for approval rate, observed default rate and manual-review capacity were fixed before tuning",
+    "Every band reports the value of each economic assumption at which it breaks even, a 27-cell sensitivity grid records which band wins under each combination, and 400 bootstrap resamples put a 95% interval on every headline figure",
+    "Approval and observed default are reported per state code and employment type under each band, so the distributional effect of a cut-off is visible rather than implied",
+    "The full evaluation reproduces byte-identically across independent runs"
+  ],
+  "operationalTradeoffs": [
+    "Contribution figures are assumption-led (12% contribution rate, 65% loss severity, ₹1,500 per manual review), not observed profit and loss. All three are analyst inputs; the review cost has no published source at all and is labelled an unsourced stand-in wherever it appears.",
+    "No band clears zero at the published assumptions. The best of the three sits at −₹0.07 cr with a 95% interval of −₹0.65 to +₹0.49 cr, so it is not distinguishable from zero, and in 13 of 27 published assumption combinations no band clears zero either.",
+    "The refusal is conditional, not absolute. Under an explicit assumption that an operational miss cures with zero credit loss, conservative needs 0.32% of its first-EMI misses to be operational to clear zero, roughly 22 of 6,722 defaulted loans. The source cannot identify operational misses, later cure, or realized loss, so the scenario frames the lender evidence required rather than claiming it.",
+    "The bureau score column encodes 'no usable score' as a number: 12,835 loans carried values of 11 to 18 whose description read 'Not Scored', on a scale whose floor is 300, and the thin-file indicator was derived from the raw column so it marked every one of them as having a bureau file. Recoding them moved the conservative band from +₹1.52 cr to −₹0.07 cr and withdrew the recommendation.",
+    "An earlier version omitted the cost of the manual reviews the strategy itself generates and reported +₹4.17 cr for the conservative band. That figure overstated the benefit and was withdrawn before the correction above.",
+    "The source cannot separate credit events from mandate or payment-plumbing failures and does not observe later cure or realized loss. Operational contamination is plausible, not measured, and any onboarding response requires lender evidence.",
+    "Loss severity of 65% is an ultimate-loss assumption charged against loans that missed a first instalment. A first-EMI miss is a delinquency flag, not a loss event, and the source carries no recovery or roll-rate data to size the difference.",
+    "The isotonic calibrator was fitted on September and applied to October, and the months ran at different default rates, so predicted risk sits below observed risk in all ten deciles. The scores rank; they do not price.",
+    "Under the conservative band, approval ranges from 60.3% to 10.1% across state codes, a ratio of 0.17 against a four-fifths screen. State is target-encoded into the score. The source carries no protected attribute, so this is impact reporting and not a fair-lending opinion.",
+    "Three consecutive months of one 2018 quarter, with October falling in the Indian festival period. There is no out-of-time validation beyond a single month and no economic cycle.",
+    "There is no status-quo baseline, because no incumbent policy is known for this dataset.",
+    "Eleven direct-identifier and identity-document fields are excluded from modelling and from every response as a product-control choice, not a data-rights limit",
+    "Branch, state, supplier and manufacturer are anonymised codes with no published lookup; they are used as drill keys and concentration rankings, never as chart axes, and no real name is inferred",
+    "The demo scales to zero after about 285 seconds idle, so a first request after a pause takes about 22 seconds"
+  ],
+  "disclaimer": "This dataset measures first-EMI default, not fraud. The source is a public Kaggle archive of Indian vehicle loans whose published licence is recorded as unknown and which is used here on the repository owner's authority; it is not client data. Source identifiers, precise location, birth date, workforce identifiers, contact flags, and identity-document fields are excluded from every response. Nothing here makes an approval, denial, pricing, underwriting, or automated decision, and no fraud-detection capability is claimed.",
+  "dataDisclosure": {
+    "source": "Vehicle Loan Default Prediction (Kaggle, avikpaul4u); private provenance retained outside the public repository",
+    "license": "Kaggle metadata reports the licence as unknown; the repository owner authorised local use, full deployment, and public showcasing. Project code is MIT (LICENSE); the derived database is carved out in NOTICE.",
+    "classification": "public",
+    "permittedUse": "Retrospective analysis, demonstration, and public showcasing",
+    "includedFields": [
+      "loan and disbursement amounts",
+      "disbursal date",
+      "loan-to-value ratio",
+      "bureau score and enquiry counts",
+      "prior account history aggregates",
+      "employment type",
+      "anonymised state code",
+      "anonymised manufacturer code",
+      "first-EMI default outcome"
+    ],
+    "excludedFields": [
+      "UNIQUEID",
+      "DATE_OF_BIRTH",
+      "CURRENT_PINCODE_ID",
+      "EMPLOYEE_CODE_ID",
+      "AADHAR_FLAG",
+      "PAN_FLAG",
+      "VOTERID_FLAG",
+      "DRIVING_FLAG",
+      "PASSPORT_FLAG",
+      "MOBILENO_AVL_FLAG"
+    ],
+    "deployedArtifactContents": [
+      "application code",
+      "the built SQLite database covering all 233,154 loans",
+      "generated report artifacts"
+    ]
+  },
+  "evidence": [
+    {
+      "id": "evaluation.holdout",
+      "kind": "evaluation",
+      "claim": "The calibrated challenger reaches 0.64363 AUROC and 0.17364 Brier score on the October holdout, with decile calibration error of 0.04542 against 0.25169 at baseline.",
+      "source": "artifacts/strategy_summary.json",
+      "method": "Time-ordered train/calibration/test split with isotonic probability calibration, scored on a held-out 98,364-loan October cohort",
+      "result": 0.64363,
+      "scope": "August–October 2018 retrospective first-EMI default",
+      "environment": "local reproducible run"
+    },
+    {
+      "id": "evaluation.reproducibility",
+      "kind": "evaluation",
+      "claim": "The evaluation reproduces byte-identically across independent runs.",
+      "source": "scripts/run_evaluation.py and artifacts/strategy_summary.json",
+      "method": "Re-ran scripts/run_evaluation.py twice and compared the SHA-256 of artifacts/strategy_summary.json",
+      "result": "byte-identical"
+    },
+    {
+      "id": "security.dependencies",
+      "kind": "security",
+      "claim": "No known vulnerabilities in production dependencies, and no credentials in Git history.",
+      "source": ".github/workflows/quality.yml",
+      "method": "npm audit --omit=dev, pip-audit, and a credential scan of Git history",
+      "result": 0
+    },
+    {
+      "id": "security.injection",
+      "kind": "security",
+      "claim": "SQL injection payloads against integer and string parameters on both the API and the dashboard were rejected or bound as literals, leaving the fact table intact at 233,154 rows.",
+      "source": "api/main.py and api/analytics.py",
+      "method": "Manual injection probing against every parameterized endpoint, followed by a row-count check",
+      "result": true
+    },
+    {
+      "id": "review.accessibility",
+      "kind": "review",
+      "claim": "Every interactive surface passes responsive and accessibility gates at 390, 768, 1280 and 1440 pixels.",
+      "source": "DESIGN.md and artifacts/design-review/",
+      "method": "Automated CDP checks for horizontal overflow, WCAG AA contrast across 412 text nodes, visible focus rings measured with real Tab key events, and heading order",
+      "result": 0
+    },
+    {
+      "id": "disclosure.scope",
+      "kind": "disclosure",
+      "claim": "The source has no fraud outcome and no channel field, so the project makes no fraud-detection claim.",
+      "source": "NOTICE and docs/scope.md",
+      "method": "Field-by-field review of the published data dictionary against the project's stated scope",
+      "result": true
+    },
+    {
+      "id": "deployment.live",
+      "kind": "deployment",
+      "claim": "The hosted demo serves every route from Azure Container Apps and reports its exact source revision through the anonymous health contract.",
+      "source": "portfolio/release.json",
+      "method": "Request the live health endpoint and compare source_sha with the GitHub default-branch commit before registry admission",
+      "result": true,
+      "environment": "Azure Container Apps, eastus"
+    },
+    {
+      "id": "delivery.performance",
+      "kind": "review",
+      "claim": "A first visit transfers 71,565 bytes instead of 226,439, and the deployed image pulls 125.1 MB instead of 232.9 MB.",
+      "source": "Dockerfile and CASE-STUDY.md",
+      "method": "Measured response bytes and encoding through the live ingress, and image sizes from the registry manifest; cold start sampled three times after 360 s idle windows",
+      "result": 71565,
+      "environment": "Azure Container Apps, eastus"
+    },
+    {
+      "id": "economics.sensitivity",
+      "kind": "evaluation",
+      "claim": "The conservative band has the highest net contribution in 22 of 27 published assumption combinations, but in 13 of those 27 every band loses money, and at the published assumptions no band clears zero.",
+      "source": "artifacts/strategy_summary.json",
+      "method": "Recomputed net contribution for all three bands at each of 27 combinations of contribution rate, loss severity and review cost",
+      "result": 22,
+      "scope": "August–October 2018 retrospective first-EMI default"
+    }
+  ],
+  "story": {
+    "recruiterSummary": "A credit-policy analyst can test where to draw a first-EMI risk line across 233,154 real vehicle loans, see the confidence interval around the answer and which states it declines, and drill to the individual loans behind any number.",
+    "technicalNarrative": "One SQLite star schema feeds every surface through a shared parameterized SQL layer, so the API, the React application, the KPI pack and the published evidence cannot drift apart. A calibrated challenger is selected on calibration error rather than ranking alone, because a policy band needs probabilities that mean what they say  -  and the monitoring view then shows that on this holdout they do not, since observed default exceeds predicted in every decile. The economics are exposed as sliders rather than asserted, because the band ranking flips inside the plausible range of its own assumptions. Headline figures carry bootstrap intervals because the net result is a small difference between two much larger numbers. The whole platform runs as one process in one scale-to-zero container, with hand-authored inline SVG charts so no charting library ships to the browser.",
+    "intendedUser": "A credit-policy analyst preparing a band recommendation for governance review.",
+    "example": {
+      "title": "Recommending a conservative first-EMI band",
+      "steps": [
+        "Open the workbench and filter the October holdout cohort",
+        "Compare the conservative band against the reference band on admitted volume, observed default rate and manual-review load",
+        "Drag loss severity from 65% to 75% and watch every band go negative, and the recommendation become a refusal",
+        "Read where the selected band breaks even on each assumption, and check the 27-cell grid behind the headline",
+        "Open the loan inspector for records behind a high-volume state code, then export the monthly KPI pack"
+      ]
+    },
+    "technologyDecisions": [
+      {
+        "technology": "SQLite",
+        "rationale": "A 233,154-row star schema fits comfortably in a single file, ships inside the container, and needs no separate database service on a free tier.",
+        "alternative": "PostgreSQL on a managed free tier",
+        "tradeoff": "No concurrent writers and no network access to the store; acceptable because this workload is read-only and single-container."
+      },
+      {
+        "technology": "A shared parameterized SQL layer",
+        "rationale": "The API, dashboard, and KPI pack all read the same .sql files, so the evaluated evidence and the reported figures cannot diverge.",
+        "alternative": "Per-surface query code",
+        "tradeoff": "Less freedom to shape queries per surface, in exchange for figures that reconcile by construction."
+      },
+      {
+        "technology": "React with hand-authored inline SVG charts",
+        "rationale": "The five analytics views share one client and ship no charting runtime.",
+        "alternative": "A second dashboard framework and process",
+        "tradeoff": "The project owns its chart primitives in exchange for one coherent application and a smaller browser bundle."
+      }
+    ],
+    "executiveSummary": "Across 233,154 Indian vehicle loans, none of the three evaluated first-EMI risk bands clears zero at the published assumptions. The best, a conservative 16% cut-off, admits 44.69% of applications at a 15.29% observed default rate and lands at −₹0.07 cr once its 27,585 manual reviews are costed; resampling puts it above zero in only 39% of draws. That conclusion emerged from correcting a data defect: the bureau column encoded 'no score' as a number, and fixing it moved the same band from +₹1.52 cr to negative. But the refusal is conditional. A 21.7% first-EMI rate cannot be pure credit risk, and loans that missed because a mandate failed carry no credit loss, so the workbench reports how much of the label would have to be operational for each band to break even. Conservative needs 0.32%. The output is therefore a threshold a lender can test against its own payment plumbing, not a verdict on the loans.",
+    "scalabilityRoadmap": [
+      "The store is the binding constraint, not the model. SQLite serves 233,154 rows from a single file well past this demo's needs; a genuine origination volume with concurrent writers would move it to Postgres, and the shared parameterized SQL layer is the seam that makes that a swap rather than a rewrite.",
+      "Scoring is offline and batch. Real-time decisioning would need the calibrated model behind a service with its own latency budget and a feature store, neither of which exists here and neither of which this retrospective evidence would justify building yet.",
+      "The economics are recomputed in the browser from three per-band totals because the risk cut-off does not move with the assumptions. Any change that lets an analyst move the cut-off itself breaks that shortcut and needs the scoring path back on the server.",
+      "Nothing is monitored automatically. Before this carried an operational decision it would need alerting, a scheduled reproducibility check, and drift monitoring on the score distribution."
+    ],
+    "limitations": [
+      "The outcome is first-EMI default, not fraud and not long-horizon credit performance; the source has no fraud flag and no channel field.",
+      "A 21.7% first-EMI default rate implies the label mixes operational and mandate failures with genuine credit risk, and nothing in the source separates them.",
+      "Loss severity is an ultimate-loss assumption applied to a first-payment miss; the source has no recovery or roll-rate data.",
+      "Three months of 2018 disbursements, evaluated retrospectively, with October in festival season. Nothing here establishes forward performance.",
+      "The money figures are assumption-led. No band clears zero at the published assumptions, and in 13 of 27 published combinations none clears zero either.",
+      "The best band's net contribution is not statistically distinguishable from zero: a 95% interval of −₹0.65 to +₹0.49 cr.",
+      "Predicted probabilities are miscalibrated on the holdout by 3 to 5 points in every decile; the scores rank but do not price.",
+      "Under the conservative band 11 of 18 readable state codes fall below a four-fifths approval screen. The source has no protected attribute, so this is impact reporting, not a fair-lending test.",
+      "There is no status-quo baseline to compare against, because no incumbent policy is known for this dataset."
+    ],
+    "evidence": [
+      {
+        "value": "−₹0.07 cr",
+        "label": "Net contribution, conservative band",
+        "context": "Best of three at the published assumptions, with a 95% interval of −₹0.65 to +₹0.49 cr; reference −₹3.52 cr and expansion −₹13.08 cr. No band clears zero.",
+        "method": "Gross contribution on admitted principal, less credit loss on observed defaults, less the cost of every referral the band generates, on the 98,364-loan October holdout.",
+        "meaning": "The only evaluated band that pays for itself once its own operating cost is counted.",
+        "evidenceRefs": [
+          "economics.sensitivity"
+        ]
+      },
+      {
+        "value": "22 of 27",
+        "label": "Assumption combinations the conservative band wins",
+        "context": "In 13 of those same 27 combinations, no band clears zero at all.",
+        "method": "Recomputed every band's net contribution at each combination of contribution rate (10/12/14%), loss severity (55/65/75%) and review cost (₹0/1,500/3,000).",
+        "meaning": "The recommendation is robust to which band, and fragile as to whether to lend at all.",
+        "evidenceRefs": [
+          "economics.sensitivity"
+        ]
+      },
+      {
+        "value": "0.04542",
+        "label": "Decile calibration error",
+        "context": "Against 0.25169 for the logistic baseline, on the same holdout.",
+        "method": "Mean absolute gap between predicted and observed default rates across ten score deciles.",
+        "meaning": "Why the calibrated challenger was selected over a better-known baseline: a policy band is only as trustworthy as its probabilities.",
+        "evidenceRefs": [
+          "evaluation.holdout"
+        ]
+      },
+      {
+        "value": "byte-identical",
+        "label": "Evaluation reproducibility",
+        "context": "artifacts/strategy_summary.json is byte-identical across independent runs.",
+        "method": "Re-ran the evaluation twice from the same source archive and compared SHA-256.",
+        "meaning": "Every published figure can be regenerated rather than taken on trust.",
+        "evidenceRefs": [
+          "evaluation.reproducibility"
+        ]
+      }
+    ]
+  },
+  "resume": {
+    "bulletCandidates": [
+      {
+        "bullet": "Found that a bureau score column encoded 'no usable score' as numeric values of 11-18 for 12,835 loans, and that the thin-file flag derived from it was inverted; correcting it moved the recommended policy band from +₹1.52 cr to −₹0.07 cr and withdrew the recommendation.",
+        "role": "Data Analyst",
+        "evidenceRefs": [
+          "evaluation.holdout",
+          "economics.sensitivity"
+        ]
+      },
+      {
+        "bullet": "Found that a published +₹4.17 cr strategy benefit omitted the cost of the manual reviews the strategy itself generated; recosting it changed which policy band was defensible.",
+        "role": "Data Analyst",
+        "evidenceRefs": [
+          "economics.sensitivity"
+        ]
+      },
+      {
+        "role": "Data Analyst",
+        "bullet": "Converted a negative policy recommendation into a testable operations question by deriving how much of a 21.7% first-EMI default rate would have to be payment-mandate failure for each risk band to break even: 0.32% for the recommended band, against 19.68% for the widest.",
+        "evidenceRefs": [
+          "economics.sensitivity"
+        ]
+      },
+      {
+        "bullet": "Attached 400-resample bootstrap intervals to a policy recommendation and showed the leading band was not distinguishable from zero, then reported approval rates by state showing 11 of 18 fell below a four-fifths screen.",
+        "role": "Data Analyst",
+        "evidenceRefs": [
+          "economics.sensitivity",
+          "evaluation.holdout"
+        ]
+      },
+      {
+        "bullet": "Built post-deployment monitoring that surfaced a systematic calibration failure: observed default exceeded predicted in all ten score deciles because the calibrator was fitted on a quieter month than the one it scored.",
+        "role": "Data Analyst",
+        "evidenceRefs": [
+          "evaluation.holdout"
+        ]
+      },
+      {
+        "bullet": "Designed a SQLite star schema and shared parameterized SQL layer feeding a JSON API and a React analytics application, with the evaluation reproducing byte-identically across runs.",
+        "role": "Data Analyst",
+        "evidenceRefs": [
+          "evaluation.reproducibility"
+        ]
+      }
+    ]
+  },
+  "presentation": {
+    "question": "Where should we draw the first-EMI risk line, and what does each line cost us?",
+    "answer": "No evaluated band clears zero at the published assumptions. The conservative band admits 44.69% of applications at a 15.29% observed first-EMI default rate and lands at −₹0.07 cr once its 27,585 manual reviews are costed, above zero in only 39% of holdout resamples. The refusal is conditional: it clears zero if just 0.32% of its first-EMI misses are payment-mandate failures rather than credit events, which is a number a lender's operations team already holds.",
+    "decisionSupported": "Recommend or refuse one retrospective first-EMI policy band for governance review.",
+    "evaluationMode": "Retrospective holdout on August–October 2018 disbursements, with a 27-cell assumption sensitivity grid",
+    "publicationStatus": "Source published; hosted demo live on Azure Container Apps",
+    "licenseNote": "Code is MIT. The derived loan database is carved out in NOTICE: it comes from a Kaggle dataset whose published licence is recorded as unknown and is included on the owner's own authority for demonstration only.",
+    "terms": [
+      {
+        "term": "First-EMI default",
+        "plainLanguage": "The borrower missed the very first monthly instalment.",
+        "projectUse": "The only outcome this dataset records, and the only thing any band here is measured against."
+      },
+      {
+        "term": "AUROC",
+        "plainLanguage": "How well the model ranks riskier borrowers above safer ones; 0.5 is a coin flip.",
+        "projectUse": "Reported at 0.64363, which is modest and stated as such rather than dressed up."
+      },
+      {
+        "term": "Brier score and ECE",
+        "plainLanguage": "Whether a predicted 20% risk really happens about 20% of the time.",
+        "projectUse": "Why the calibrated challenger was selected over the baseline; a policy band is only as trustworthy as its probabilities."
+      },
+      {
+        "term": "Manual-review rate",
+        "plainLanguage": "The share of applications a band sends to a human instead of deciding automatically.",
+        "projectUse": "Treated as a capacity constraint, because a band that reviews everything is not operable."
+      },
+      {
+        "term": "Assumption-led contribution",
+        "plainLanguage": "A modelled money figure built on stated assumptions, not measured profit.",
+        "projectUse": "Shown with its 12% contribution rate, 65% loss severity and ₹1,500 review cost printed beside it, and adjustable, so it is never mistaken for observed profit and loss."
+      },
+      {
+        "term": "Break-even assumption value",
+        "plainLanguage": "How far one assumption can move before the answer flips.",
+        "projectUse": "The conservative band breaks even at 0.64791 loss severity against 0.65 assumed, so the published scenario is already just beyond that line."
+      }
+    ],
+    "technologyRoles": {
+      "Python": "Data preparation, evaluation, and the KPI report pack",
+      "SQL": "The shared parameterized query layer every surface reads",
+      "SQLite": "The star-schema store shipped inside the container",
+      "FastAPI": "The JSON API, landing page, and static hosting on one port",
+      "React": "The policy workbench where bands are compared",
+      "Docker": "The single-container deployment artifact"
+    },
+    "quickStart": [
+      {
+        "label": "Build the store",
+        "command": "uv run python scripts/build_db.py"
+      },
+      {
+        "label": "Reproduce the evaluation",
+        "command": "uv run python scripts/run_evaluation.py"
+      },
+      {
+        "label": "Run the platform",
+        "command": "uv run uvicorn api.main:app --host 127.0.0.1 --port 8000"
+      }
+    ]
+  }
+}
