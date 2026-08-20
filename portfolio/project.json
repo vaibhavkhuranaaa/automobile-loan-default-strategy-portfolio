@@ -30,7 +30,7 @@
     "runtime": "Single Docker container on the Consumption plan, 1.0 vCPU / 2.0 GiB, scale-to-zero: FastAPI serves the built React application, the JSON API and the report artifacts from one process, reading a SQLite star schema",
     "exposure": "anonymous",
     "productionClaim": false,
-    "verifiedAt": "2026-08-10T15:19:17Z",
+    "verifiedAt": "2026-08-20T20:32:48Z",
     "expiresAt": null,
     "evidenceRefs": [
       "deployment.live",
